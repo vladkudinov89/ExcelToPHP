@@ -1,13 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Service;
+
+define("EXCEL_MYSQL_DEBUG", false);
 
 class Excel
 {
     private $mysql_connect;
     private $excel_file;
 
-    function __construct($connection, $filename)
+    function __construct($connection, string $filename)
     {
 
         if (!class_exists(self::class)) {
@@ -20,16 +22,17 @@ class Excel
     }
 
     public
-    function excel_to_mysql_by_index($table_name, $index = 0, $columns_names = 0, $start_row_index = false, $condition_functions = false, $transform_functions = false, $unique_column_for_update = false, $table_types = false, $table_keys = false, $table_encoding = "utf8_general_ci", $table_engine = "InnoDB") {
+    function excel_to_mysql($table_name, $index = 0, $columns_names = 0, $start_row_index = false, $condition_functions = false, $transform_functions = false, $unique_column_for_update = false, $table_types = false, $table_keys = false, $table_encoding = "utf8_general_ci", $table_engine = "InnoDB") {
 
         $PHPExcel_file = \PHPExcel_IOFactory::load($this->excel_file);
 
         $PHPExcel_file->setActiveSheetIndex($index);
-        return $this->excel_to_mysql($PHPExcel_file->getActiveSheet(), $table_name, $columns_names, $start_row_index, $condition_functions, $transform_functions, $unique_column_for_update, $table_types, $table_keys, $table_encoding, $table_engine);
+
+        return $this->excel_to_mysql_main($PHPExcel_file->getActiveSheet(), $table_name, $columns_names, $start_row_index, $condition_functions, $transform_functions, $unique_column_for_update, $table_types, $table_keys, $table_encoding, $table_engine);
     }
 
     private
-    function excel_to_mysql($worksheet, $table_name, $columns_names, $start_row_index, $condition_functions, $transform_functions, $unique_column_for_update, $table_types, $table_keys, $table_encoding, $table_engine)
+    function excel_to_mysql_main($worksheet, $table_name, $columns_names, $start_row_index, $condition_functions, $transform_functions, $unique_column_for_update, $table_types, $table_keys, $table_encoding, $table_engine)
     {
 
         if (!$this->mysql_connect->connect_error) {
