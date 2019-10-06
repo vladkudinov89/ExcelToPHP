@@ -16,4 +16,26 @@ define("EXCEL_MYSQL_DEBUG", false);
 
 $excel_mysql_import_export = new Excel((new Database)->connect(), "./сотрудники.xls");
 
-echo $excel_mysql_import_export->excel_to_mysql_iterate(array("excel_mysql_iterate")) ? "OK\n" : "FAIL\n";
+echo $excel_mysql_import_export->excel_to_mysql_by_index(
+    "employees",
+    0,
+    array(
+        "Employer",
+        "Birthday",
+        "Skills"
+    ),
+    2,
+    false ,
+    array(
+        "Birthday" =>
+            function ($value) {
+                return PHPExcel_Shared_Date::ExcelToPHPObject($value)->format('Y-m-d');
+            }
+    ),
+    1,
+    array(
+        "VARCHAR(50) NOT NULL",
+        "DATETIME NOT NULL",
+        "VARCHAR(100) NOT NULL"
+    )
+) ? "OK\n" : "FAIL\n";
