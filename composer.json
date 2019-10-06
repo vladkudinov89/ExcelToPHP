@@ -1,0 +1,20 @@
+{
+  "name": "php-excel-project",
+  "description": "Excel to MySQL",
+  "authors": [
+    {
+      "name": "Vlad Kudinov"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^2.5",
+    "phpoffice/phpexcel": "1.8.2"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}
