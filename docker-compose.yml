@@ -2,7 +2,7 @@ version: '2'
 services:
 
   nginx:
-    container_name: app-webserver
+    container_name: webserver
     build:
       context: ./
       dockerfile: docker/nginx.docker
