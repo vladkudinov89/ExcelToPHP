@@ -21,6 +21,8 @@ To start your containers you have only type next command:
 make docker-up
 ```
 
+After start Docker you must visit ``http://localhost:8080`` page to start migration to PHP.
+
 To view migrated database you must visit web page phpmyadmin:
 ```
 http://localhost:9191
