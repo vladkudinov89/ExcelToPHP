@@ -1,17 +1,5 @@
-version: '2'
+version: '3'
 services:
-
-  nginx:
-    container_name: webserver
-    build:
-      context: ./
-      dockerfile: docker/nginx.docker
-    volumes:
-      - ./:/var/www
-    ports:
-      - "8080:80"
-    networks:
-      - app-network
 
   #PHP Service
   app:
@@ -23,14 +11,27 @@ services:
     restart: unless-stopped
     tty: true
     environment:
-        SERVICE_NAME: app
-        SERVICE_TAGS: dev
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
     working_dir: /var/www
     volumes:
-    - ./:/var/www
+      - ./:/var/www
     networks:
-    - app-network
+      - app-network
 
+  #Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: webserver
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
+  #MySQL Service
   db:
     image: mysql:5.7
     container_name: db
