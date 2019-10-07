@@ -11,12 +11,6 @@ class Excel
 
     function __construct($connection, string $filename)
     {
-
-        if (!class_exists(self::class)) {
-
-            throw new \Exception("Excel library required!");
-        }
-
         $this->mysql_connect = $connection;
         $this->excel_file = $filename;
     }
@@ -28,13 +22,14 @@ class Excel
 
         $PHPExcel_file->setActiveSheetIndex($index);
 
-        return $this->excel_to_mysql_main($PHPExcel_file->getActiveSheet(), $table_name, $columns_names, $start_row_index, $condition_functions, $transform_functions, $unique_column_for_update, $table_types, $table_keys, $table_encoding, $table_engine);
+        $this->excel_to_mysql_main($PHPExcel_file->getActiveSheet(), $table_name, $columns_names, $start_row_index, $condition_functions, $transform_functions, $unique_column_for_update, $table_types, $table_keys, $table_encoding, $table_engine);
+
+        return true;
     }
 
     private
     function excel_to_mysql_main($worksheet, $table_name, $columns_names, $start_row_index, $condition_functions, $transform_functions, $unique_column_for_update, $table_types, $table_keys, $table_encoding, $table_engine)
     {
-
         if (!$this->mysql_connect->connect_error) {
 
             // Строка для названий столбцов таблицы MySQL

@@ -8,10 +8,10 @@ class DB
     {
         return [
             "driver" => "mysql",
-            "host" => $_ENV["DB_HOST"],
-            "database" => $_ENV["DB_NAME"],
-            "username" => $_ENV["DB_USER"],
-            "password" => $_ENV["DB_PASSWORD"],
+            "host" => $_ENV["DB_HOST"] ?? 'db',
+            "database" => $_ENV["DB_NAME"] ?? 'app',
+            "username" => $_ENV["DB_USER"] ?? 'app',
+            "password" => $_ENV["DB_PASSWORD"] ?? 'secret',
             "charset" => "utf8",
             "collation" => "utf8_unicode_ci",
             "prefix" => "",

@@ -5,15 +5,41 @@ namespace App\Service;
 class ExcelToPHP
 {
     private $execute;
+    private $status = false;
 
-    public function __construct($connection,string $filename)
+    const SUCCESS = "Migrate SUCCESS";
+    const FAIL = "Migrate FAIL";
+
+    private $connection;
+    private $filename;
+
+    public function __construct($connection, string $filename)
     {
-        $this->execute = new Excel($connection , $filename);
+        $this->connection = $connection;
+        $this->filename = $filename;
     }
 
-    public function run()
+    public function migrate()
     {
-       echo $this->execute->excel_to_mysql(
+        if(!file_exists($this->filename)){
+
+            $this->status = false;
+
+            throw new \Exception('File doesn\'t exist');
+
+        }
+
+        if($this->connection->connect_error ){
+
+            $this->status = false;
+
+            throw new \Exception('Connection problem');
+
+        }
+
+        $this->execute = new Excel($this->connection, $this->filename);
+
+       return $this->status = $this->execute->excel_to_mysql(
             "employees",
             0,
             array(
@@ -22,7 +48,7 @@ class ExcelToPHP
                 "Skills"
             ),
             2,
-            false ,
+            false,
             array(
                 "Birthday" =>
                     function ($value) {
@@ -35,6 +61,15 @@ class ExcelToPHP
                 "DATETIME NOT NULL",
                 "VARCHAR(100) NOT NULL"
             )
-        ) ? "Migrate OK" : "Migrate Fail";
+        );
+    }
+
+    public function getStatus(): string
+    {
+        if( $this->status == true){
+            return self::SUCCESS;
+        } else {
+            return self::FAIL;
+        }
     }
 }
